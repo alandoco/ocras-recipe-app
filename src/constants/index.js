@@ -21,7 +21,10 @@ const MEASUREMENTS = [
     'pinch of'
 ]
 
+const FILE_SIZE_LIMIT = 1000000
+
 module.exports = {
     CUISINES,
-    MEASUREMENTS
+    MEASUREMENTS,
+    FILE_SIZE_LIMIT
 }

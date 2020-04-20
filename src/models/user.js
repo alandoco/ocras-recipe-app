@@ -3,7 +3,7 @@ const validator = require('validator')
 const bcrypt = require('bcrypt')
 const randtoken = require('rand-token')
 const jwt = require('jsonwebtoken')
-const {CUISINES} = require('../../constants')
+const {CUISINES} = require('../constants/index')
 
 const userSchema = new mongoose.Schema( {
     firstName: {
@@ -93,10 +93,10 @@ userSchema.statics.findByCredentials = async (email, password) => {
 
 userSchema.methods.generateAuthToken = async function() {
     const user = this
-    
     const token = jwt.sign({_id:user._id.toString()}, process.env.JWT_SECRET)
 
     user.tokens.push({token})
+    
     await user.save()
 
     return token
