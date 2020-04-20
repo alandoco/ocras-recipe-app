@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcrypt')
 const randtoken = require('rand-token')
+const jwt = require('jsonwebtoken')
 const {CUISINES} = require('../../constants')
 
 const userSchema = new mongoose.Schema( {
@@ -90,6 +91,17 @@ userSchema.statics.findByCredentials = async (email, password) => {
 
 }
 
+userSchema.methods.generateAuthToken = async function() {
+    const user = this
+    
+    const token = jwt.sign({_id:user._id.toString()}, process.env.JWT_SECRET)
+
+    user.tokens.push({token})
+    await user.save()
+
+    return token
+}
+
 userSchema.methods.toJSON = function() {
     const user = this
     const userObject = user.toObject()
@@ -104,6 +116,8 @@ userSchema.methods.toJSON = function() {
 
 userSchema.pre('save', async function(next) {
     const user = this
+    
+    console.log(user)
 
     if(user.isModified('password')){
         user.password = await bcrypt.hash(user.password, 8)
@@ -112,7 +126,6 @@ userSchema.pre('save', async function(next) {
     if(!user.isVerified){
         user.verificationToken = randtoken.generate(20)
     }
-
     next()
 
 })
