@@ -2,7 +2,7 @@ const express = require('express')
 const userController = require('../controllers/user')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
-const {upload} = require('../controllers/file-upload')
+const {upload} = require('../utils/file-upload')
 
 const router = new express.Router()
 

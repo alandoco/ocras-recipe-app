@@ -1,5 +1,5 @@
 const User = require('../models/user')
-const {saveFile} = require('../controllers/file-upload')
+const {saveFile} = require('../utils/file-upload')
 const {sendVerificationEmail} = require('../emails/account')
 
 exports.userCreate = async (req, res) => {
