@@ -12,6 +12,8 @@ router.get('/users/verify/:token', userController.userVerifyEmail)
 
 router.post('/users/login', userController.userLogin)
 
+router.get('users/me', auth, userController.getUserProfile)
+
 router.patch('/users/me', auth, userController.userUpdate)
 
 router.delete('/users/me', auth, userController.userDelete)

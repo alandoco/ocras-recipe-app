@@ -1,5 +1,5 @@
 const User = require('../models/user')
-const {saveFile} = require('../utils/file-upload')
+const {convertImage} = require('../utils/file-upload')
 const {sendVerificationEmail} = require('../emails/account')
 
 exports.userCreate = async (req, res) => {
@@ -86,6 +86,12 @@ exports.userDelete = async (req, res) => {
 }
 
 exports.userUploadProfileImage = async (req, res) => {
-    await saveFile(req.user, req.file.buffer)
+    const buffer = await convertImage(req.file.buffer)
+    req.user.avatar = buffer
+    await req.user.save()
     res.send()
+}
+
+exports.getUserProfile = async (req, res) => {
+    res.send(req.user)
 }

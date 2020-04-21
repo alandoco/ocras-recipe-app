@@ -15,14 +15,12 @@ const upload = multer({
     }
 })
 
-const saveFile = async (user, fileBuffer) => {
-    const buffer = await sharp(fileBuffer).resize({
+const convertImage = async (fileBuffer) => {
+    console.log(fileBuffer)
+    return await sharp(fileBuffer).resize({
         width: 250,
         height: 250
     }).png().toBuffer()
-
-    user.avatar = buffer
-    await user.save()
 }
 
-module.exports = {upload, saveFile}
+module.exports = {upload, convertImage}

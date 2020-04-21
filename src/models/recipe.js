@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
-const {CUISINES} = require('./constants')
-const {MEASUREMENTS} = require('./constants')
+const {CUISINES} = require('../constants/index')
+const {MEASUREMENTS} = require('../constants/index')
 const recipeSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -24,17 +24,27 @@ const recipeSchema = new mongoose.Schema({
     servings: {
         type: Number
     },
-    Ingredients: [{
+    ingredients: [{
         amount:{
-            type: Number,
-            required: true
+            type: Number
         },
         unit: {
-            type: String
+            type: String,
+            lowercase: true,
+            enum: MEASUREMENTS
         },
         ingredient: {
             type: String,
-            enum: MEASUREMENTS
+            required: true
+        }
+    }],
+    method:[{
+        step:{
+        type:Number
+        },
+        instruction:{
+            type: String,
+            required: true
         }
     }],
     isVerified: {
@@ -65,6 +75,4 @@ recipeSchema.virtual('User', {
 
 const Recipe = mongoose.model('Recipe', recipeSchema)
 
-module.exports = {
-    Recipe
-}
+module.exports = Recipe

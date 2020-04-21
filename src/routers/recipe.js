@@ -1,6 +1,17 @@
 const express = require('express')
-const Recipe = require('../models/recipe')
+const recipeController = require('../controllers/recipe')
+const Recipe = require('../models/user')
+const auth = require('../middleware/auth')
+const {upload} = require('../utils/file-upload')
 
-const router = express.router()
+const router = new express.Router()
+
+router.post('/recipes/create', auth, upload.single('image'), recipeController.recipeCreate)
+
+// router.patch('/recipes/update', auth, recipeController.recipeUpdate)
+
+// router.get('/recipes/:id', auth, recipeController.recipeGet)
+
+// router.delete('/recipes', auth, recipeController.recipeCreate)
 
 module.exports = router
