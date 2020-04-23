@@ -12,6 +12,8 @@ router.patch('/recipes/update/(:id)', auth, recipeController.recipeUpdate)
 
 router.get('/recipes', auth, recipeController.recipeGet)
 
+router.get('/recipes/:id', auth, recipeController.recipeGetOne)
+
 // router.delete('/recipes', auth, recipeController.recipeCreate)
 
 module.exports = router

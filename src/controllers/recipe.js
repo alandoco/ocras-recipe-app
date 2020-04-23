@@ -66,3 +66,20 @@ exports.recipeGet = async (req, res) => {
         res.status(500).send({error: e.message})
     }
 }
+
+exports.recipeGetOne = async (req, res) => {
+    try {
+        const recipe = await Recipe.findOne({
+            $or: [{ creator: req.user._id },{ isPublic: true }],
+            _id: req.params.id,
+        })
+
+        if(!recipe){
+            return res.status(404).send({error: "Recipe not found"})
+        }
+
+        res.send(recipe)
+    } catch(e) {
+        res.status(500).send({error: e.message})
+    }
+}
