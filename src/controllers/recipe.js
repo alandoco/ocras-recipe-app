@@ -47,14 +47,22 @@ exports.recipeUpdate = async (req, res) => {
 }
 
 exports.recipeGet = async (req, res) => {
-
-    const recipes = await Recipe.find({
+    try{
+        const recipes = await Recipe.find({
         ...req.query.owner === 'me' ? { creator: req.user._id } : {$or: [{ creator: req.user._id },{ isPublic: true }]},
         ...req.query.name ? { name: new RegExp(req.query.name,"i") } : {},
         ...req.query.rating ? { rating: {$gte: req.query.rating}} : {},
         ...req.query.cuisine ? { cuisine: req.query.cuisine} : {},
         ...req.query.ingredients ? {'ingredients.ingredient': {$all: req.query.ingredients.split(',')}  } : {}
-    }).collation({ "locale": "en", "strength": 2 })
+        }).collation({ "locale": "en", "strength": 2 })
 
-    res.send(recipes)
+        console.log(recipes)
+        if(recipes.length === 0){
+            return res.status(404).send({error: "No recipes found"})
+        }
+
+        res.send(recipes)
+    } catch(e) {
+        res.status(500).send({error: e.message})
+    }
 }
