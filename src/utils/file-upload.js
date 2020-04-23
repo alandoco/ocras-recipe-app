@@ -1,6 +1,6 @@
 const multer = require('multer')
 const sharp = require('sharp')
-const {FILE_SIZE_LIMIT} = require('../constants/index')
+const {FILE_SIZE_LIMIT} = require('../utils/constants')
 
 const upload = multer({
     limits: {

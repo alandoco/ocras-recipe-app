@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
-const {CUISINES} = require('../constants/index')
-const {MEASUREMENTS} = require('../constants/index')
+const {CUISINES} = require('../utils/constants')
+const {MEASUREMENTS} = require('../utils/constants')
 const recipeSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -47,16 +47,17 @@ const recipeSchema = new mongoose.Schema({
             required: true
         }
     }],
-    isVerified: {
-        type: Boolean,
-        default: false
-    },
-    temporaryVerificationToken: {
-        type: String
-    },
     isPublic: {
         type: Boolean,
         default: false
+    },
+    totalTime: {
+        type: Number,
+        required: true
+    },
+    temperature: {
+        type: String,
+        enum: ['Hot', 'Cold']
     },
     creator: {
         type: mongoose.Schema.Types.ObjectId,
@@ -72,6 +73,15 @@ recipeSchema.virtual('User', {
     localField: '_id',
     foreignField: 'favourites'
 })
+
+recipeSchema.methods.toJSON = function () {
+    const recipeObject = this.toObject()
+
+    delete recipeObject.creator
+
+    return recipeObject
+
+}
 
 const Recipe = mongoose.model('Recipe', recipeSchema)
 

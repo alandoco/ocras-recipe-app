@@ -1,6 +1,8 @@
 const User = require('../models/user')
 const {convertImage} = require('../utils/file-upload')
 const {sendVerificationEmail} = require('../emails/account')
+const helpers = require('../utils/helpers')
+const constants = require('../utils/constants')
 
 exports.userCreate = async (req, res) => {
     const user = new User(req.body)
@@ -56,9 +58,7 @@ exports.userLogin = async (req, res) => {
 
 exports.userUpdate = async (req, res) => {
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['email', 'password', 'bio', 'favouriteCuisine', 'avatar']
-
-    const isUpdateAllowed = updates.every((update) => allowedUpdates.includes(update))
+    const isUpdateAllowed = helpers.checkIfValidUpdate(updates, constants.USER_ALLOWED_UPDATES)
 
     if(!isUpdateAllowed){
         res.status(400).send({error: "Invalid updates"})

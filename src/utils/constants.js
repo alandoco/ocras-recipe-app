@@ -22,9 +22,30 @@ const MEASUREMENTS = [
 ]
 
 const FILE_SIZE_LIMIT = 1000000
+const RECIPE_PRIVACY = ['me', 'public', 'both']
+const RECIPE_ALLOWED_UPDATES = [
+    'name', 
+    'ingredients', 
+    'method', 
+    'cuisine', 
+    'isPublic', 
+    'image'
+]
+
+const USER_ALLOWED_UPDATES = [
+    'email', 
+    'password', 
+    'bio', 
+    'favouriteCuisine', 
+    'avatar'
+]
+
+
 
 module.exports = {
     CUISINES,
     MEASUREMENTS,
-    FILE_SIZE_LIMIT
+    FILE_SIZE_LIMIT,
+    RECIPE_ALLOWED_UPDATES,
+    USER_ALLOWED_UPDATES
 }

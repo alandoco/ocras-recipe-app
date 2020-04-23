@@ -3,7 +3,7 @@ const validator = require('validator')
 const bcrypt = require('bcrypt')
 const randtoken = require('rand-token')
 const jwt = require('jsonwebtoken')
-const {CUISINES} = require('../constants/index')
+const {CUISINES} = require('../utils/constants')
 
 const userSchema = new mongoose.Schema( {
     firstName: {

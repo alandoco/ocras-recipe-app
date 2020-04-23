@@ -1,8 +1,10 @@
 const mongoose = require('mongoose')
 const Recipe = require('../models/recipe')
 const {convertImage} = require('../utils/file-upload')
+const constants = require('../utils/constants')
+const helpers = require('../utils/helpers')
 
-exports.recipeCreate = async (req, res, next) => {
+exports.recipeCreate = async (req, res) => {
     try {
         req.body.ingredients = JSON.parse(req.body.ingredients)
         req.body.method = JSON.parse(req.body.method)
@@ -16,4 +18,43 @@ exports.recipeCreate = async (req, res, next) => {
     } catch(e) {
         res.status(500).send(e)
     }
+}
+
+exports.recipeUpdate = async (req, res) => {
+    try {
+        const _id = req.params.id
+        const updates = Object.keys(req.body)
+        const isUpdateAllowed = helpers.checkIfValidUpdate(updates, constants.RECIPE_ALLOWED_UPDATES)
+
+        if(!isUpdateAllowed){
+            return res.status(400).send({error: "Invalid Updates"})
+        }
+        
+        const recipe = await Recipe.findOneAndUpdate({
+            _id: mongoose.Types.ObjectId(_id),
+            creator: mongoose.Types.ObjectId(req.user._id)
+        }, req.body, {new:true})
+
+        if(!recipe){
+            return res.status(404).send({error: "Cannot find recipe"})
+        }
+
+        res.send(recipe)
+
+    } catch(e) {
+        res.status(500).send({error: e.message})
+    }
+}
+
+exports.recipeGet = async (req, res) => {
+
+    const recipes = await Recipe.find({
+        ...req.query.owner === 'me' ? { creator: req.user._id } : {$or: [{ creator: req.user._id },{ isPublic: true }]},
+        ...req.query.name ? { name: new RegExp(req.query.name,"i") } : {},
+        ...req.query.rating ? { rating: {$gte: req.query.rating}} : {},
+        ...req.query.cuisine ? { cuisine: req.query.cuisine} : {},
+        ...req.query.ingredients ? {'ingredients.ingredient': {$all: req.query.ingredients.split(',')}  } : {}
+    }).collation({ "locale": "en", "strength": 2 })
+
+    res.send(recipes)
 }
