@@ -83,3 +83,58 @@ exports.recipeGetOne = async (req, res) => {
         res.status(500).send({error: e.message})
     }
 }
+
+exports.recipeDelete = async (req, res) => {
+    try {
+        const recipe = await Recipe.findOneAndDelete({
+            _id: req.params.id,
+            creator: req.user._id
+        })
+
+        if(!recipe){
+            return res.status(404).send({error: "Unable to delete this recipe"})
+        }
+        res.send(recipe)
+    } catch(e) {
+        res.status(500).send({error: e.message})
+    }
+}
+
+exports.recipeRate = async (req, res) => {
+    try{
+        const rating = req.body.rating
+
+        if(! (rating > 0 && rating < 5)){
+            return res.status(400).send({error: "Invalid Rating"})
+        }
+        
+        const recipe = await Recipe.findOne({
+            _id: req.params.id,
+            creator: {$ne: req.user._id},
+            isPublic: true
+        })
+
+        if(!recipe){
+            return res.status(404).send({error: "You don't have permission to rate this recipe"})
+        }
+
+        if(recipe.numRatings === 0){
+            recipe.rating = rating
+            recipe.numRatings +=1
+
+            await recipe.save()
+
+            return res.send(recipe)
+        }
+
+        const newRating = (((recipe.rating * recipe.numRatings) + rating) / (recipe.numRatings +1))
+        recipe.rating = Math.round(newRating * 100) / 100
+        recipe.numRatings += 1
+
+        await recipe.save()
+        res.status(200).send(recipe)
+
+    } catch(e) {
+        res.status(500).send({error: e})
+    }
+}

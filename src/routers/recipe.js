@@ -8,12 +8,14 @@ const router = new express.Router()
 
 router.post('/recipes/create', auth, upload.single('image'), recipeController.recipeCreate)
 
-router.patch('/recipes/update/(:id)', auth, recipeController.recipeUpdate)
+router.patch('/recipes/update/:id', auth, recipeController.recipeUpdate)
 
 router.get('/recipes', auth, recipeController.recipeGet)
 
 router.get('/recipes/:id', auth, recipeController.recipeGetOne)
 
-// router.delete('/recipes', auth, recipeController.recipeCreate)
+router.delete('/recipes/:id', auth, recipeController.recipeDelete)
+
+router.patch('/recipes/rating/:id', auth, recipeController.recipeRate)
 
 module.exports = router
