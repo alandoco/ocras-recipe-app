@@ -22,4 +22,10 @@ router.post('/users/me/avatar', auth, upload.single('avatar'), userController.us
     res.status(400).send({error: error.message})
 })
 
+router.patch('/users/favourites/add/:id', auth, userController.userAddFavouriteRecipe)
+
+router.get('/users/favourites', auth, userController.userGetFavouriteRecipes)
+
+router.delete('/users/favourites/:id', auth, userController.userDeleteFavouriteRecipes)
+
 module.exports = router
