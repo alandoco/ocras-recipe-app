@@ -106,7 +106,7 @@ exports.recipeRate = async (req, res) => {
     try{
         const rating = req.body.rating
 
-        if(! (rating > 0 && rating < 5)){
+        if(! (rating > 0 && rating < 6)){
             return res.status(400).send({error: "Invalid Rating"})
         }
         
