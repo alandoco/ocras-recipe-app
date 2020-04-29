@@ -12,7 +12,11 @@ router.get('/users/verify/:token', userController.userVerifyEmail)
 
 router.post('/users/login', userController.userLogin)
 
-router.get('users/me', auth, userController.getUserProfile)
+router.patch('/users/logout', auth, userController.userLogout)
+
+router.patch('/users/logoutall', auth, userController.userLogoutAllDevices)
+
+router.get('/users/me', auth, userController.getUserProfile)
 
 router.patch('/users/me', auth, userController.userUpdate)
 

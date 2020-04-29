@@ -57,6 +57,26 @@ exports.userLogin = async (req, res) => {
     }
 }
 
+exports.userLogout = async (req, res) => {
+    try {
+        req.user.tokens = req.user.tokens.filter((token) => token.token != req.token)
+        await req.user.save()
+        res.send()
+    } catch (e) {
+        res.status(500).send({e: e.message})
+    }
+}
+
+exports.userLogoutAllDevices = async (req, res) => {
+    try {
+        req.user.tokens = []
+        await req.user.save()
+        res.send()
+    } catch(e) {
+        res.status(500).send({error: e.message})
+    }   
+}
+
 exports.userUpdate = async (req, res) => {
     const updates = Object.keys(req.body)
     const isUpdateAllowed = helpers.checkIfValidUpdate(updates, constants.USER_ALLOWED_UPDATES)
@@ -115,7 +135,7 @@ exports.userAddFavouriteRecipe = async (req, res) => {
         }
 
         req.user.favourites.push(recipeId)
-        req.user.save()
+        await req.user.save()
         
         res.send(req.user)
     } catch(e) {
@@ -152,7 +172,7 @@ exports.userDeleteFavouriteRecipes = async (req, res)=> {
         }
 
         req.user.favourites = updatedFavourites
-        req.user.save()
+        await req.user.save()
 
         res.send(req.user)
     } catch(e) {
