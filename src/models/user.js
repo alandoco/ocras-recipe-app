@@ -74,6 +74,12 @@ userSchema.virtual('recipes',{
     foreignField: 'creator'
 })
 
+userSchema.virtual('comments',{
+    ref: 'Comment',
+    localField: '_id',
+    foreignField: 'userId'
+})
+
 userSchema.statics.findByCredentials = async (email, password) => {
     const user = await User.findOne({ email })
 

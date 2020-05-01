@@ -74,6 +74,12 @@ recipeSchema.virtual('User', {
     foreignField: 'favourites'
 })
 
+recipeSchema.virtual('comments',{
+    ref: 'Comment',
+    localField: '_id',
+    foreignField: 'recipeId'
+})
+
 recipeSchema.methods.toJSON = function () {
     const recipeObject = this.toObject()
 
