@@ -6,14 +6,14 @@ const commentSchema = new mongoose.Schema({
         required: true,
         maxLength: 160
     },
-    likes: {
-        type: Number,
-        default: 0
-    },
-    dislikes: {
-        type: Number,
-        default: 0
-    },
+    likes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        unique: true
+    }],
+    dislikes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        unique: true
+    }],
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true

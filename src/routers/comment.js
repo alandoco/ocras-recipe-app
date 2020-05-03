@@ -14,4 +14,8 @@ router.post('/comments/:recipeId', auth, checkIsRecipePublic, commentController.
 
 router.patch('/comments/:commentId', auth, checkCommentOwner, commentController.updateComment)
 
+router.delete('/comments/:commentId', auth, checkCommentOwner, commentController.deleteComment)
+
+router.patch('/comments/:commentId/react', auth, commentController.reactionToComment)
+
 module.exports = router
