@@ -7,15 +7,18 @@ const constants = require('../utils/constants')
 
 exports.userCreate = async (req, res) => {
     const user = new User(req.body)
-
+    
     try {
+        if(!user.password){
+            throw new Error('You must enter a password')
+        }
         await user.save()
         
         sendVerificationEmail(user.email, user.firstName, user.verificationToken)
         
         res.send(user)
     } catch(e) {
-        res.send(e)
+        res.status(500).send({error: e.message})
     }
 }
 
