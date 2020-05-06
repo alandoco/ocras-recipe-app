@@ -86,6 +86,11 @@ userSchema.statics.findByCredentials = async (email, password) => {
         throw new Error('Unable to Login')
     }
 
+    //If we find a user without a password it means they have previously signed in using a third party
+    if(!user.password){
+        throw new Error('Please use third party sign-in')
+    }
+
     const isMatch = await bcrypt.compare(password, user.password)
 
     if(!isMatch){
@@ -121,7 +126,7 @@ userSchema.methods.toJSON = function() {
 
 userSchema.pre('save', async function(next) {
     const user = this
-    
+
     if(user.isModified('password')){
         user.password = await bcrypt.hash(user.password, 8)
     }

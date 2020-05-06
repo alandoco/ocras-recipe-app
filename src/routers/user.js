@@ -3,7 +3,7 @@ const userController = require('../controllers/user')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
 const {upload} = require('../utils/file-upload')
-
+const {passport} = require('../middleware/passport')
 const router = new express.Router()
 
 router.post('/users/create', userController.userCreate)
@@ -32,4 +32,12 @@ router.get('/users/favourites', auth, userController.userGetFavouriteRecipes)
 
 router.delete('/users/favourites/:id', auth, userController.userDeleteFavouriteRecipes)
 
-module.exports = router
+router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }))
+
+router.get('/auth/google/verify', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    res.redirect('/users/me');
+  })
+
+  module.exports = router

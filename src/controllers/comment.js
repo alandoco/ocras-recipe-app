@@ -72,10 +72,4 @@ exports.reactionToComment = async (req, res) => {
     } catch (e) {
         res.status(500).send({error: e.message})
     }
-}   
-
-// const setLikeStatus = (action) => {
-//     if(action === 'like'){
-//         return type === 'undo' ? -1 + 
-//     }
-// }
+}

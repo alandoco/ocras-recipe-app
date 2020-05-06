@@ -7,7 +7,7 @@ const constants = require('../utils/constants')
 
 exports.userCreate = async (req, res) => {
     const user = new User(req.body)
-    
+
     try {
         if(!user.password){
             throw new Error('You must enter a password')
@@ -56,7 +56,7 @@ exports.userLogin = async (req, res) => {
         //For now we just pass in as Bearer Token in Postman
         res.send({user, token})
     } catch(e) {
-        res.status(400).send()
+        res.status(400).send({error: e.message})
     }
 }
 
@@ -167,9 +167,6 @@ exports.userDeleteFavouriteRecipes = async (req, res)=> {
     try {
         updatedFavourites = req.user.favourites.filter((favourite) => favourite != req.params.id)
 
-        console.log(req.user.favourites)
-        console.log(updatedFavourites)
-        
         if(updatedFavourites == req.user.favourites){
             return res.status(404).send({error: "Recipe not found in favourites"})
         }
