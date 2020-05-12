@@ -37,6 +37,7 @@ router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 
 router.get('/auth/google/verify', 
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
+    req.session.user = req.user;
     res.redirect('/users/me');
   })
 

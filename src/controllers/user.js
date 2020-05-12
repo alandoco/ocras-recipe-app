@@ -149,12 +149,12 @@ exports.userAddFavouriteRecipe = async (req, res) => {
 exports.userGetFavouriteRecipes = async (req, res) => {
     try {
         const recipes = await Recipe.find({
-            _id: {$in: req.user.favourites,
+            _id: {$in: req.user.favourites},
             isPublic: true
-        }})
+        })
 
         if(!recipes) {
-            res.status(404).send({error: "You do not have any saved recipes"})
+            return res.status(404).send({error: "You do not have any saved recipes"})
         }
 
         res.send(recipes)

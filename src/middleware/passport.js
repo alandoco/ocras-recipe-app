@@ -2,17 +2,25 @@ const passport = require('passport');
 const User = require('../models/user')
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
-//Serialize determines the data passed into the session - user in this case
-//It's stored in req.session.passport.user
-passport.serializeUser(function(user, done){
-  done(null, user);
+//Sets the cookie using the 2nd param passed into the done method
+passport.serializeUser((user, done) => {
+  done(null, user._id);
 });
 
-passport.deserializeUser(function(id, done){
-  User.findById(id, function(err, user){
-    done(err, user);
-  });
-});
+passport.deserializeUser( async (id, done) => {
+  try {
+    const user = await User.findById(id)
+
+    if(!user){
+      return done(null, false, {error: "User not found"})
+    }
+
+    done(false, user)
+
+  } catch(e) {
+    done(e)
+  }
+ })
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -25,6 +33,7 @@ passport.use(new GoogleStrategy({
       const user = await User.findOne({email: profile.emails[0].value})
 
       if(user) {
+        //Done passes the user into the request object which is used to call serialize()
         return done(null, user);
       }
       
