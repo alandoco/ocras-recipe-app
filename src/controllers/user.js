@@ -38,7 +38,7 @@ exports.userVerifyEmail = async (req, res) => {
 
         res.send({user, token})
     } catch(e) {
-        res.status(500).send(e)
+        res.status(500).send({error: e.message})
     }
 }
 
@@ -66,7 +66,7 @@ exports.userLogout = async (req, res) => {
         await req.user.save()
         res.send()
     } catch (e) {
-        res.status(500).send({e: e.message})
+        res.status(500).send({error: e.message})
     }
 }
 
@@ -105,7 +105,7 @@ exports.userDelete = async (req, res) => {
         await req.user.remove()
         res.send(req.user)
     } catch (e) {
-        res.status(500).send()
+        res.status(500).send({error: e.message})
     }
 }
 
@@ -142,7 +142,7 @@ exports.userAddFavouriteRecipe = async (req, res) => {
         
         res.send(req.user)
     } catch(e) {
-        res.status(500).send({e: e.message})
+        res.status(500).send({error: e.message})
     }
 }
 
@@ -159,7 +159,7 @@ exports.userGetFavouriteRecipes = async (req, res) => {
 
         res.send(recipes)
     } catch(e) {
-        res.status(500).send({e: e.message})
+        res.status(500).send({error: e.message})
     }
 }
 
@@ -176,6 +176,6 @@ exports.userDeleteFavouriteRecipes = async (req, res)=> {
 
         res.send(req.user)
     } catch(e) {
-        res.status(500).send({e: e.message})
+        res.status(500).send({error: e.message})
     }
 }

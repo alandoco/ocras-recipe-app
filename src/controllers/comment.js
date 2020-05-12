@@ -33,7 +33,7 @@ exports.deleteComment = async(req, res) => {
 
         res.send()
     } catch (e) {
-        res.status(500).send({e: e.message})
+        res.status(500).send({error: e.message})
     }
 }
 

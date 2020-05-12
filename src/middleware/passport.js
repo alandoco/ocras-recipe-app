@@ -1,6 +1,8 @@
 const passport = require('passport');
 const User = require('../models/user')
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const {convertImage} = require('../utils/file-upload')
+const {downloadImageFromURL} = require('../utils/helpers')
 
 //Sets the cookie using the 2nd param passed into the done method
 passport.serializeUser((user, done) => {
@@ -36,8 +38,12 @@ passport.use(new GoogleStrategy({
         //Done passes the user into the request object which is used to call serialize()
         return done(null, user);
       }
+
+      //Downloading and converting google avatar
+      const image = await downloadImageFromURL(profile.photos[0].value)
+      const buffer = await convertImage(image)
       
-      const newUser = new User({firstName: profile.name.givenName, lastName: profile.name.familyName, email:profile.emails[0].value, isVerified:true})
+      const newUser = new User({firstName: profile.name.givenName, lastName: profile.name.familyName, email:profile.emails[0].value, avatar: buffer, isVerified:true})
       await newUser.generateAuthToken()
 
       await newUser.save()

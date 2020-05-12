@@ -16,7 +16,6 @@ const upload = multer({
 })
 
 const convertImage = async (fileBuffer) => {
-    console.log(fileBuffer)
     return await sharp(fileBuffer).resize({
         width: 250,
         height: 250

@@ -18,7 +18,7 @@ exports.recipeCreate = async (req, res) => {
         await recipe.save()
         res.send(recipe)
     } catch(e) {
-        res.status(500).send(e)
+        res.status(500).send({e: e.message})
     }
 }
 
