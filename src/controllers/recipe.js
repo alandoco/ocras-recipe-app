@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
 const Recipe = require('../models/recipe')
-const {convertImage} = require('../utils/file-upload')
-const {uploadToS3} = require('../utils/file-upload')
+const {convertImage} = require('../utils/file-handling')
+const {uploadToS3} = require('../utils/file-handling')
+const {downloadFromS3} = require('../utils/file-handling')
 const constants = require('../utils/constants')
 const helpers = require('../utils/helpers')
 
@@ -32,7 +33,7 @@ exports.recipeCreate = async (req, res) => {
                 return res.status(400).send({error: 'Video upload failed'})
             }
 
-            req.body.videoUrl = data.data.Location
+            req.body.videoKey = data.data.Key
         }
 
         const recipe = new Recipe(req.body)
@@ -40,7 +41,7 @@ exports.recipeCreate = async (req, res) => {
         await recipe.save()
         res.send(recipe)
     } catch(e) {
-        res.status(500).send({e: e.message})
+        res.status(500).send({error: e.message})
     }
 }
 
@@ -99,6 +100,11 @@ exports.recipeGetOne = async (req, res) => {
 
         if(!recipe){
             return res.status(404).send({error: "Recipe not found"})
+        }
+
+        if(recipe.videoKey){
+            videoUrl = await downloadFromS3(recipe.videoKey)
+            return res.send({recipe, videoUrl})
         }
 
         res.send(recipe)

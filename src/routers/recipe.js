@@ -2,7 +2,7 @@ const express = require('express')
 const recipeController = require('../controllers/recipe')
 const Recipe = require('../models/user')
 const auth = require('../middleware/auth')
-const {upload} = require('../utils/file-upload')
+const {upload} = require('../utils/file-handling')
 
 const router = new express.Router()
 

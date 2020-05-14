@@ -2,7 +2,7 @@ const express = require('express')
 const userController = require('../controllers/user')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
-const {upload} = require('../utils/file-upload')
+const {upload} = require('../utils/file-handling')
 const {passport} = require('../middleware/passport')
 const router = new express.Router()
 
@@ -40,17 +40,5 @@ router.get('/auth/google/verify',
     req.session.user = req.user;
     res.redirect('/users/me');
   })
-
-
-const {convertImage} = require('../utils/file-upload')
-
-
-router.post('/aws/fileUpload', upload.single('file'), async (req, res) => {
-  //const buffer = await convertImage(req.file.buffer)
-  console.log(req.file)
-  uploadToS3(req.file)
-  //console.log(buffer)
-  res.send()
-})
 
 module.exports = router

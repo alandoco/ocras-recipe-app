@@ -1,8 +1,8 @@
 const passport = require('passport');
 const User = require('../models/user')
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const {convertImage} = require('../utils/file-upload')
-const {downloadImageFromURL} = require('../utils/helpers')
+const {convertImage} = require('../utils/file-handling')
+const {downloadImageFromURL} = require('../utils/file-handling')
 
 //Sets the cookie using the 2nd param passed into the done method
 passport.serializeUser((user, done) => {

@@ -1,6 +1,6 @@
 const User = require('../models/user')
 const Recipe = require('../models/recipe')
-const {convertImage} = require('../utils/file-upload')
+const {convertImage} = require('../utils/file-handling')
 const {sendVerificationEmail} = require('../emails/account')
 const helpers = require('../utils/helpers')
 const constants = require('../utils/constants')

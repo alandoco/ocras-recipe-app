@@ -9,7 +9,7 @@ const recipeSchema = new mongoose.Schema({
     image: {
         type: Buffer
     },
-    videoUrl: {
+    videoKey: {
         type: String
     },
     cuisine: {
