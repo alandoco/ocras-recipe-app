@@ -21,7 +21,7 @@ const MEASUREMENTS = [
     'pinch of'
 ]
 
-const FILE_SIZE_LIMIT = 1000000
+const FILE_SIZE_LIMIT = 100000000
 const RECIPE_PRIVACY = ['me', 'public', 'both']
 const RECIPE_ALLOWED_UPDATES = [
     'name', 
@@ -39,8 +39,6 @@ const USER_ALLOWED_UPDATES = [
     'favouriteCuisine', 
     'avatar'
 ]
-
-
 
 module.exports = {
     CUISINES,

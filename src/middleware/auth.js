@@ -7,7 +7,6 @@ const auth = async (req, res, next) => {
         //Checking if 3rd party authenticated
         if(req.session.user){
             req.user = req.session.user
-            console.log(req.user)
             return next()
         }
 

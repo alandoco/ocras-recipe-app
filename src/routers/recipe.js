@@ -6,7 +6,7 @@ const {upload} = require('../utils/file-upload')
 
 const router = new express.Router()
 
-router.post('/recipes/create', auth, upload.single('image'), recipeController.recipeCreate)
+router.post('/recipes/create', auth, upload.fields([{name: 'image', maxCount: 1}, {name: 'video', maxCount: 1}]), recipeController.recipeCreate)
 
 router.patch('/recipes/update/:id', auth, recipeController.recipeUpdate)
 

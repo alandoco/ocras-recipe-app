@@ -9,6 +9,9 @@ const recipeSchema = new mongoose.Schema({
     image: {
         type: Buffer
     },
+    videoUrl: {
+        type: String
+    },
     cuisine: {
         type: String,
         enum: CUISINES

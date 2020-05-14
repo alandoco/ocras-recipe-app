@@ -41,4 +41,16 @@ router.get('/auth/google/verify',
     res.redirect('/users/me');
   })
 
-  module.exports = router
+
+const {convertImage} = require('../utils/file-upload')
+
+
+router.post('/aws/fileUpload', upload.single('file'), async (req, res) => {
+  //const buffer = await convertImage(req.file.buffer)
+  console.log(req.file)
+  uploadToS3(req.file)
+  //console.log(buffer)
+  res.send()
+})
+
+module.exports = router

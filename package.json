@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@sendgrid/mail": "^7.0.1",
+    "aws-sdk": "^2.676.0",
     "bcrypt": "^4.0.1",
     "bcryptjs": "^2.4.3",
     "express": "^4.17.1",
@@ -25,6 +26,7 @@
     "request": "^2.88.2",
     "sendgrid": "^5.2.3",
     "sharp": "^0.25.2",
+    "uuid": "^8.0.0",
     "validator": "^13.0.0"
   },
   "devDependencies": {

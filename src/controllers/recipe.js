@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Recipe = require('../models/recipe')
 const {convertImage} = require('../utils/file-upload')
+const {uploadToS3} = require('../utils/file-upload')
 const constants = require('../utils/constants')
 const helpers = require('../utils/helpers')
 
@@ -10,8 +11,29 @@ exports.recipeCreate = async (req, res) => {
         //Need to parse data as it will be coming through as multipart-form rather than JSON
         req.body.ingredients = JSON.parse(req.body.ingredients)
         req.body.method = JSON.parse(req.body.method)
-        req.body.avatar = await convertImage(req.file.buffer)
         req.body.creator = mongoose.Types.ObjectId(req.user._id)
+
+        if(req.files.image){
+            if(!req.files.image[0].originalname.match(/\.(jpg|jpeg|png)$/)){
+                return res.status(400).send({error: 'Image must be in jpg, jpeg or png format'})
+            }
+
+            req.body.image = await convertImage(req.files.image[0].buffer)
+        }
+
+        if(req.files.video){
+
+            if(!req.files.video[0].originalname.match(/\.(mp4)$/)){
+                return res.status(400).send({error: 'Video must be in mp4 format'})
+            }
+            const data = await uploadToS3(req.files.video[0])
+
+            if(data.err){
+                return res.status(400).send({error: 'Video upload failed'})
+            }
+
+            req.body.videoUrl = data.data.Location
+        }
 
         const recipe = new Recipe(req.body)
 
@@ -58,7 +80,6 @@ exports.recipeGet = async (req, res) => {
         ...req.query.ingredients ? {'ingredients.ingredient': {$all: req.query.ingredients.split(',')}  } : {}
         }).collation({ "locale": "en", "strength": 2 })
 
-        console.log(recipes)
         if(recipes.length === 0){
             return res.status(404).send({error: "No recipes found"})
         }
