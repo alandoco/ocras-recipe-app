@@ -9,7 +9,7 @@ exports.addComment = async (req, res) => {
         })
         
         await comment.save()
-        res.send(comment)
+        res.send(comment) //test
     } catch (e) {
         res.status(500).send({error: e.message})
     }
