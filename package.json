@@ -27,7 +27,7 @@
     "sendgrid": "^5.2.3",
     "sharp": "^0.25.2",
     "uuid": "^8.0.0",
-    "validator": "^13.0.0"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "env-cmd": "^10.1.0",
